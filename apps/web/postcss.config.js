@@ -1,0 +1,1 @@
+export { default } from "@ares-bank/ui/postcss.config";
