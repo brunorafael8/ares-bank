@@ -1,0 +1,1182 @@
+type Query {
+  """Get hotel details"""
+  hotel(
+    """The hotel ID"""
+    id: String
+  ): Hotel
+  hotels(
+    """Returns the items in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the first n items from the list."""
+    first: Int
+
+    """Returns the items in the list that come before the specified cursor."""
+    before: String
+
+    """Returns the last n items from the list."""
+    last: Int
+
+    """The page size"""
+    pageSize: Int
+  ): HotelConnection
+
+  """Get countries"""
+  countries: [Country]
+
+  """Get cities"""
+  cities(
+    """The country code"""
+    code: String
+  ): [City]
+
+  """Get availability of hotels"""
+  availability(
+    """The number of results to return"""
+    first: Int
+
+    """The cursor after which to return results"""
+    after: String
+
+    """The nationality of the traveler"""
+    nationality: String
+
+    """A list of filters to apply"""
+    filters: [FilterTypeEnum]
+
+    """The check-in date"""
+    checkin: String
+
+    """The check-out date"""
+    checkout: String
+
+    """The city of the hotel"""
+    city: String
+
+    """The category of the hotel"""
+    category: CategoryTypeEnum
+
+    """The star rating of the hotel"""
+    stars: [String]
+
+    """Details of the hotel"""
+    hotel: HotelInputObject
+
+    """The latitude of the hotel location"""
+    latitude: String
+
+    """The longitude of the hotel location"""
+    longitude: String
+
+    """The distance from a reference point"""
+    distance: String
+
+    """Details of the rooms"""
+    details: [DetailsInputObject]
+  ): Availability
+
+  """Get booking tracking"""
+  bookingTracking(
+    """The reference code for the booking"""
+    referenceCode: String
+
+    """The booking code"""
+    bookingCode: String
+
+    """The status code of the booking"""
+    statusCode: String
+
+    """The check-in date for the booking"""
+    checkin: String
+
+    """The check-out date for the booking"""
+    checkout: String
+
+    """The city where the booking is made"""
+    city: String
+
+    """The deadline for the booking"""
+    deadline: String
+
+    """The code of the hotel"""
+    hotelCode: String
+
+    """The price of the booking"""
+    price: String
+
+    """The special requirements for the booking"""
+    specialRequirements: String
+
+    """A list of booking details"""
+    details: [BookingDetails]
+  ): Booking
+
+  """Get booking details"""
+  bookingDetails(
+    """The reference code for the booking"""
+    referenceCode: String
+
+    """The booking name"""
+    bookingName: String
+  ): Booking
+
+  """Get details of a hotel"""
+  hotelDetails(
+    """The hotel id"""
+    hotelId: String
+  ): HotelDetails
+
+  """Get all bookings"""
+  bookings(
+    """Get all bookings"""
+    getAll: Boolean
+  ): [Booking]
+
+  """Get bookings by id"""
+  booking(
+    """The id of the booking"""
+    id: String
+  ): Booking
+
+  """Return the current user"""
+  me: User
+}
+
+"""Represents a hotel"""
+type Hotel implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The hotel name"""
+  name: String
+
+  """The hotel description"""
+  description: String
+
+  """The city where the hotel is located"""
+  city: String
+
+  """The country where the hotel is located"""
+  country: String
+
+  """The telephone number of the hotel"""
+  telephone: String
+
+  """The number of stars of the hotel"""
+  stars: String
+
+  """The classification of the hotel"""
+  classification: String
+
+  """The address of the hotel"""
+  address: String
+
+  """The location of the hotel"""
+  location: String
+
+  """The longitude of the hotel"""
+  longitude: String
+
+  """The latitude of the hotel"""
+  latitude: String
+
+  """The status of the hotel"""
+  active: String
+
+  """The pictures of the hotel"""
+  pictures: [Picture!]
+
+  """The position of the hotel"""
+  position: Position
+
+  """The film of the hotel"""
+  film: String
+
+  """The descriptions of the hotel"""
+  descriptions: [Descriptions]
+
+  """The main facilities of the hotel"""
+  mainFacilities: MainFacilities
+
+  """The facilities of the hotel"""
+  facilities: Facilities
+
+  """The helpful facts of the hotel"""
+  helpfulFacts: HelpfulFacts
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Represents a list of pictures of a hotel"""
+type Picture {
+  """The source URL of the picture"""
+  src: String
+}
+
+"""Represents different distance vectors"""
+type Position {
+  """The distance from the center in minutes"""
+  center_distance: Float
+}
+
+"""Represents a list of descriptions in different languages"""
+type Descriptions {
+  """The language of the description"""
+  language: String
+  text: String
+
+  """The type of the description"""
+  type: DescriptionType
+}
+
+enum DescriptionType {
+  GENERAL
+  ROOMS
+  RESTAURANT
+  EXTERIOR
+  POSITION
+  LOBBY
+}
+
+"""Most important facilities provided by the Hotel"""
+type MainFacilities {
+  """Non smoking"""
+  nonsmoking: Boolean
+
+  """Parking available"""
+  parking: Boolean
+
+  """Gym available"""
+  gym: Boolean
+
+  """Sauna available"""
+  sauna: Boolean
+
+  """Heated pool available"""
+  poolHeated: Boolean
+
+  """Facilities for disabled"""
+  helpForDisabled: Boolean
+
+  """Internet available"""
+  internet: Boolean
+
+  """Air conditioning available"""
+  airconditioning: Boolean
+}
+
+"""Facilities provided by the hotel"""
+type Facilities {
+  bathroom: BathroomFacilities
+  bedroom: BedroomFacilities
+  technology: TechnologyFacilities
+  receptionServices: ReceptionServicesFacilities
+  foodAndDrink: FoodAndDrinkFacilities
+}
+
+"""Bathroom facilities provided by the hotel"""
+type BathroomFacilities {
+  hairdryer: Boolean
+  shower: Boolean
+  bathtub: Boolean
+  bidet: Boolean
+  toiletries: Boolean
+}
+
+"""Bedroom facilities provided by the hotel"""
+type BedroomFacilities {
+  tv: Boolean
+  minibar: Boolean
+  safe: Boolean
+  telephone: Boolean
+  radio: Boolean
+}
+
+"""Technology facilities provided by the hotel"""
+type TechnologyFacilities {
+  wifi: Boolean
+  tvsat: Boolean
+  modem: Boolean
+  paytv: Boolean
+  mic: Boolean
+  projector: Boolean
+  flatiron: Boolean
+  pantsiron: Boolean
+  alarm: Boolean
+}
+
+"""Reception services facilities provided by the hotel"""
+type ReceptionServicesFacilities {
+  airportShuttle: Boolean
+  cityShuttle: Boolean
+  porter: Boolean
+}
+
+"""Food and drink facilities provided by the hotel"""
+type FoodAndDrinkFacilities {
+  bar: Boolean
+  restaurant: Boolean
+  dinner: Boolean
+}
+
+"""Helpful facts about the hotel"""
+type HelpfulFacts {
+  """The check in time"""
+  checkInTime: String
+
+  """The nearest airport"""
+  nearestAirport: String
+
+  """The nearest metro station"""
+  nearestMetro: String
+
+  """The distance from the center in minutes"""
+  centerDistance: Float
+
+  """The telephone number"""
+  telephone: String
+
+  """The email address"""
+  email: String
+
+  """The number of suites"""
+  suites: Int
+
+  """The number of single rooms"""
+  singleRooms: Int
+
+  """The number of twin rooms"""
+  twinRooms: Int
+
+  """The number of triple rooms"""
+  tripleRooms: Int
+
+  """The start time of the room service"""
+  startRoomService: String
+
+  """The end time of the room service"""
+  endRoomService: String
+}
+
+"""A connection to a list of items."""
+type HotelConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [HotelEdge]
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""An edge in a connection."""
+type HotelEdge {
+  """The item at the end of the edge"""
+  node: Hotels
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Represents a hotel"""
+type Hotels implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The hotel name"""
+  name: String
+
+  """The city where the hotel is located"""
+  city: String
+
+  """The address of the hotel"""
+  address: String
+
+  """The longitude of the hotel"""
+  longitude: String
+
+  """The latitude of the hotel"""
+  latitude: String
+
+  """The hotel as photos"""
+  has_photos: String
+}
+
+"""Represents a country"""
+type Country implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The country code"""
+  code: String
+
+  """The country names"""
+  names: [CountryName]
+}
+
+"""Represents a name"""
+type CountryName {
+  """The language of the name"""
+  language: String
+
+  """The value of the name"""
+  value: String
+}
+
+"""Represents a country"""
+type City implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The city code"""
+  code: String
+
+  """The city names"""
+  names: [CityName]
+}
+
+"""Represents a name"""
+type CityName {
+  """The language of the name"""
+  language: String
+
+  """The value of the name"""
+  value: String
+}
+
+"""Represents a availability"""
+type Availability implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """Number of nights"""
+  nights: String
+
+  """Checkin date"""
+  checkin: String
+
+  """Checkout date"""
+  checkout: String
+
+  """List of hotels"""
+  hotels: AvailabilityHotelConnection
+  hotelsCount: String
+  search: AvailabilitySearch
+}
+
+"""A connection to a list of items."""
+type AvailabilityHotelConnection {
+  pageInfo: AvailabilityHotelPageInfo!
+  edges: [AvailabilityHotelEdge]
+  totalCount: String
+}
+
+"""Information about pagination in a connection."""
+type AvailabilityHotelPageInfo {
+  """Indicates if there are more pages to fetch."""
+  hasNextPage: Boolean
+
+  """Indicates if there are previous pages to fetch."""
+  hasPreviousPage: Boolean
+
+  """The cursor representing the start of the current page."""
+  startCursor: String
+
+  """The cursor representing the end of the current page."""
+  endCursor: String
+}
+
+"""Represents an edge in a connection to a hotel."""
+type AvailabilityHotelEdge {
+  """A cursor for use in pagination."""
+  cursor: String
+
+  """The hotel at the end of the edge."""
+  node: AvailabilityHotel
+}
+
+"""Represents a hotel"""
+type AvailabilityHotel {
+  """The name of the hotel"""
+  name: String
+
+  """The code of the hotel"""
+  code: String
+
+  """The stars of the hotel"""
+  stars: String
+
+  """The location of the hotel"""
+  location: String
+
+  """The latitude of the hotel"""
+  latitude: String
+
+  """The longitude of the hotel"""
+  longitude: String
+
+  """The main facilities of the hotel"""
+  mainFacilities: AvailabilityMainFacilities
+
+  """The position of the hotel"""
+  position: AvailabilityPosition
+
+  """The address of the hotel"""
+  address: String
+
+  """The city of the hotel"""
+  city: String
+
+  """The nationality of the hotel"""
+  nationality: String
+
+  """The pictures of the hotel"""
+  pictures: [String]
+
+  """The agreements of the hotel"""
+  agreements: [AvailabilityAgreement]
+}
+
+"""Most important facilities provided by the Hotel"""
+type AvailabilityMainFacilities {
+  """Non smoking"""
+  nonsmoking: Boolean
+
+  """Parking available"""
+  parking: Boolean
+
+  """Gym available"""
+  gym: Boolean
+
+  """Sauna available"""
+  sauna: Boolean
+
+  """Heated pool available"""
+  poolHeated: Boolean
+
+  """Facilities for disabled"""
+  helpForDisabled: Boolean
+
+  """Internet available"""
+  internet: Boolean
+
+  """Air conditioning available"""
+  airconditioning: Boolean
+}
+
+"""Represents different distance vectors"""
+type AvailabilityPosition {
+  """The distance from the center in kilometers"""
+  center_distance: Float
+}
+
+"""Represents a agreement"""
+type AvailabilityAgreement {
+  """The id of the agreement"""
+  id: String
+
+  """The availability of the agreement"""
+  available: String
+
+  """The room type of the agreement"""
+  roomType: String
+
+  """The room basis of the agreement"""
+  roomBasis: String
+
+  """The meal basis of the agreement"""
+  mealBasis: String
+
+  """The total of the agreement"""
+  total: String
+
+  """The special of the agreement"""
+  special: String
+
+  """The ctype of the agreement"""
+  ctype: String
+
+  """The cancelation policies of the agreement"""
+  cancelationPolicies: [String]
+
+  """The remarks of the agreement"""
+  remarks: [AvailabilityRemark]
+
+  """The rooms of the agreement"""
+  rooms: [AvailabilityRoom]
+}
+
+type AvailabilityRemark {
+  remark: String
+}
+
+type AvailabilityRoom {
+  """The type of the room"""
+  type: String
+
+  """The required of the room"""
+  required: String
+
+  """The occupancy of the room"""
+  occupancy: String
+
+  """The price of the room"""
+  price: [AvailabilityPrice]
+}
+
+type AvailabilityPrice {
+  """The price from"""
+  from: String
+
+  """The price to"""
+  to: String
+
+  """The price"""
+  price: String
+}
+
+"""Represents a search"""
+type AvailabilitySearch {
+  """The number of the search"""
+  number: String
+
+  """The agreement of the search"""
+  agreement: String
+
+  """The price of the search"""
+  price: String
+}
+
+"""The type of filters to apply"""
+enum FilterTypeEnum {
+  """Filter for available only"""
+  AVAILONLY
+
+  """Filter for heavy availability"""
+  AVLHEAVY
+
+  """Filter for best price"""
+  BESTPRICE
+
+  """Filter for best contract"""
+  BESTCONTRACT
+
+  """Filter for best room basis"""
+  BESTROOMBASIS
+
+  """Exclude non-refundable"""
+  EXCLUDENONREF
+
+  """Exclude dynamic pricing"""
+  EXCLUDEDYNAMIC
+
+  """Filter for reduced rates"""
+  REDUCED
+
+  """Filter for best arrangement"""
+  BESTARRANGMENT
+}
+
+"""The category of the hotel"""
+enum CategoryTypeEnum {
+  """Tourist category"""
+  T
+
+  """Standard category"""
+  ST
+
+  """First class category"""
+  F
+
+  """Superior first class category"""
+  SF
+
+  """Deluxe category"""
+  D
+}
+
+"""Input object for hotel details"""
+input HotelInputObject {
+  """The unique ID of the hotel"""
+  id: String
+
+  """The name of the hotel"""
+  name: String
+}
+
+"""Input object for room details"""
+input DetailsInputObject {
+  """The type of room"""
+  type: RoomTypeEnum
+
+  """Indicates if the room is required"""
+  required: String
+
+  """Indicates if an extra bed is required"""
+  extrabed: Boolean
+
+  """The age of the person for whom the room is booked"""
+  age: String
+
+  """Indicates if a cot is required"""
+  cot: String
+
+  """The occupancy details of the room"""
+  occupancy: String
+}
+
+"""The type of room"""
+enum RoomTypeEnum {
+  """Single room"""
+  SGL
+
+  """Twin suite"""
+  TSU
+
+  """Twin room"""
+  TWN
+
+  """Double room"""
+  DBL
+
+  """Triple room"""
+  TRP
+
+  """Quadruple room"""
+  QUD
+
+  """Family room"""
+  FAM
+
+  """Studio room"""
+  STR
+}
+
+"""Represents a booking"""
+type Booking implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """The booking code"""
+  code: String
+
+  """The payment session"""
+  paymentSession: String
+
+  """The booking status"""
+  status: String
+
+  """The checkin date"""
+  checkin: String
+
+  """The checkout date"""
+  checkout: String
+
+  """The hotel"""
+  hotel: BookingHotel
+
+  """The city"""
+  city: String
+
+  """The Nationality"""
+  nationality: String
+
+  """The price"""
+  price: String
+
+  """The special requirements"""
+  specialRequirements: String
+
+  """The booking details"""
+  details: SingleBookingDetails
+}
+
+"""Represents a hotel"""
+type BookingHotel {
+  """The hotel code"""
+  code: String
+
+  """The hotel name"""
+  name: String
+}
+
+"""Represents the booking details"""
+type SingleBookingDetails {
+  """The room"""
+  rooms: [BookingRoomType]
+}
+
+"""Represents a room"""
+type BookingRoomType {
+  """The room type"""
+  type: String
+
+  """The room required"""
+  required: String
+
+  """The room extrabed"""
+  extrabed: String
+
+  """The room age"""
+  age: String
+
+  """The room cot"""
+  cot: String
+
+  """The room occupancy"""
+  occupancy: String
+
+  """The room pax"""
+  pax: [BookingPaxType]
+}
+
+"""Represents a pax"""
+type BookingPaxType {
+  """The leader of the pax"""
+  leader: String
+
+  """The title of the pax"""
+  title: String
+
+  """The name of the pax"""
+  name: String
+
+  """The surname of the pax"""
+  surname: String
+
+  """The initial of the pax"""
+  initial: String
+
+  """The age of the pax"""
+  age: String
+}
+
+input BookingDetails {
+  """The room details"""
+  room: BookingRoom
+
+  """A list of pax"""
+  pax: [BookingPax]
+}
+
+input BookingRoom {
+  """The type of the booking field"""
+  type: String
+
+  """Indicates if the booking field is required"""
+  required: String
+
+  """Indicates if an extra bed is required"""
+  extrabed: String
+
+  """The list of age of the persons for whom the booking is made (3-4-5)"""
+  age: String
+
+  """Indicates if a cot is required"""
+  cot: String
+
+  """The occupancy details of the booking"""
+  occupancy: String
+}
+
+input BookingPax {
+  """Indicates if the person is the leader of the booking"""
+  leader: String
+
+  """The title of the person (Mr., Mrs., Miss.)"""
+  title: String
+
+  """The first name of the person"""
+  name: String
+
+  """The surname of the person"""
+  surname: String
+
+  """The initial of the person's middle name"""
+  initial: String
+
+  """The age of the person"""
+  age: String
+}
+
+"""Represents the main details of a hotel according to its code"""
+type HotelDetails {
+  id: String
+  city: String
+  country: String
+  name: String
+  email: String
+  address: String
+  stars: String
+  classification: String
+  description: TextSections
+  lt: String
+  lg: String
+  pictures: [String]
+}
+
+type TextSections {
+  txt_rooms: [Translations]
+  txt_general: [Translations]
+  txt_restaurant: [Translations]
+  txt_exterior: [Translations]
+  txt_position: [Translations]
+  txt_lobby: [Translations]
+}
+
+type Translations {
+  ru: [String]
+  fr: [String]
+  en: [String]
+  zh: [String]
+  hr: [String]
+  ca: [String]
+  de: [String]
+  it: [String]
+  sl: [String]
+  ja: [String]
+  es: [String]
+}
+
+"""User data"""
+type User implements Node {
+  """The ID of an object"""
+  id: ID!
+
+  """mongoose _id"""
+  _id: String!
+  name: String
+  email: String
+  date_of_birth: String
+  phone: String
+  address: Address
+  country: String
+  createdAt: String
+  updatedAt: String
+}
+
+"""User address"""
+type Address {
+  address: String
+  city: String
+  state: String
+  zip: String
+  country: String
+}
+
+type Mutation {
+  """Login user with email"""
+  UserLoginWithEmail(input: UserLoginWithEmailInput!): UserLoginWithEmailPayload
+
+  """Register user with email"""
+  UserRegisterWithEmail(input: UserRegisterWithEmailInput!): UserRegisterWithEmailPayload
+
+  """Edit user"""
+  UserEditMutation(input: UserEditInput!): UserEditPayload
+
+  """Verify user email"""
+  UserVerifyEmail(input: UserVerifyEmailInput!): UserVerifyEmailPayload
+
+  """Edit user address"""
+  UserAddressMutation(input: UserAddressInput!): UserAddressPayload
+  BookingRequest(input: BookingRequestInput!): BookingRequestPayload
+
+  """Cancel booking"""
+  BookingCancellationMutation(input: BookingCancellationInput!): BookingCancellationPayload
+
+  """Update booking status"""
+  BookingUpdateStatus(input: BookingUpdateStatusInput!): BookingUpdateStatusPayload
+}
+
+type UserLoginWithEmailPayload {
+  token: String
+  me: User
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input UserLoginWithEmailInput {
+  email: String!
+  password: String!
+  loginForAdmin: Boolean
+  clientMutationId: String
+}
+
+type UserRegisterWithEmailPayload {
+  token: String
+  me: User
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input UserRegisterWithEmailInput {
+  name: String!
+  email: String!
+  password: String!
+  clientMutationId: String
+}
+
+type UserEditPayload {
+  me: User
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input UserEditInput {
+  name: String
+  email: String
+  phone: String
+  date_of_birth: String
+  country: String
+  clientMutationId: String
+}
+
+type UserVerifyEmailPayload {
+  email: String
+  nextStep: String
+
+  """Default error field resolver."""
+  error: String
+  clientMutationId: String
+}
+
+input UserVerifyEmailInput {
+  email: String!
+  clientMutationId: String
+}
+
+type UserAddressPayload {
+  me: User
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input UserAddressInput {
+  address: String!
+  city: String!
+  state: String!
+  country: String!
+  zip: String!
+  clientMutationId: String
+}
+
+type BookingRequestPayload {
+  bookingCode: String
+  id: Booking
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input BookingRequestInput {
+  search: String!
+  synchronous: String!
+  nationality: String!
+  checkin: String!
+  checkout: String!
+  city: String!
+  availonly: String!
+  hotelCode: String!
+  hotelName: String!
+  paymentSession: String!
+  specialRequirements: String
+  details: BookingRequestDetails
+  clientMutationId: String
+}
+
+input BookingRequestDetails {
+  rooms: [BookingDetailsRoomType]
+}
+
+"""Booking details room type"""
+input BookingDetailsRoomType {
+  type: String
+  cot: String
+  extrabed: String
+  pax: [BookingDetailsPax]
+}
+
+input BookingDetailsPax {
+  leader: String
+  title: String
+  name: String
+  surname: String
+  initial: String
+  age: String
+}
+
+type BookingCancellationPayload {
+  bookingCode: String
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input BookingCancellationInput {
+  referenceCode: String!
+  bookingName: String!
+  clientMutationId: String
+}
+
+type BookingUpdateStatusPayload {
+  id: String
+  booking: Booking
+
+  """Default error field resolver."""
+  error: String
+
+  """Default success field resolver."""
+  success: String
+  clientMutationId: String
+}
+
+input BookingUpdateStatusInput {
+  paymentSession: String!
+  status: String!
+  clientMutationId: String
+}
